@@ -1,0 +1,6 @@
+scripts:
+elt
+read all games from current season
+network graph
+  irt depends on there being one holistic set of games; it can be sparse, but there can't be two separate leagues that have no overlap.
+irt

@@ -1,7 +1,11 @@
+# Check to make sure there aren't two discrete sub-populations of NCAA
+# teams.
+
 library(tidyverse)
 library(arrow)
+library(igraph)
 
-df <- read_parquet('/Users/andrewbartnof/Documents/projects/public/ncaa_rankings/clean_data/game_scores.parquet')
+df <- read_parquet('/Users/andrewbartnof/Documents/projects/public/ncaa_rankings/clean_data/filtered_game_scores.parquet')
 
 team_names <-
 	unique(c(df$home_team_name, df$away_team_name)) %>%
@@ -17,3 +21,7 @@ num_components <- components(g_mbb)$no
 
 print("Checking if there are 1 components:")
 sprintf("%i number of components", num_components)
+g_mbb$layout
+
+# There's a handful of outliers, but it's certainly a single component
+plot(g_mbb, vertex.label=NA, vertex.size = 2, vertex.color = 'black')

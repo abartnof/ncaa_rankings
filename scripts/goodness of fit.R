@@ -19,48 +19,16 @@ set.seed(1)
 
 df_raw <- read_parquet('/Users/andrewbartnof/Documents/projects/public/ncaa_rankings/clean_data/game_scores.parquet')
 
-# Filter 
-# 1. to teams that have scored at least 5 games home, and 5 games away.
-# 2. to games where one team won and the other didn't (seems obvious)
-num_games <- 5L
-
-valid_home_teams <-
-	df_raw %>%
-	count(home_team_name) %>%
-	filter(n >= num_games) %>%
-	select(team_name = home_team_name)
-
-valid_away_teams <-
-	df_raw %>%
-	count(away_team_name) %>%
-	filter(n >= num_games) %>%
-	select(team_name = away_team_name)
-
-valid_team_list <-
-	valid_home_teams %>%
-	inner_join(valid_away_teams, by = 'team_name') %>%
-	pull
-
-df <-
-	df_raw %>%
-	filter(
-		home_score != away_score,
-		home_team_name %in% valid_team_list,
-		away_team_name %in% valid_team_list
-	)
-sprintf('%i input games', nrow(df_raw))
-sprintf('%i usable games', nrow(df))
-sprintf('%i games omitted', nrow(df_raw) - nrow(df))
-
 # Create the modeling dataframe
+team_levels <- unique(c(df$home_team_name, df$away_team_name))
 model_data <-
 	df %>%
 	mutate(
-		home_team = factor(home_team_name, levels = valid_team_list),
-		away_team = factor(away_team_name, levels = valid_team_list),
-		did_home_win = as.integer(home_score > away_score)
+		home_team = factor(home_team_name, levels = team_levels, ordered = FALSE),
+		away_team = factor(away_team_name, levels = team_levels, ordered = FALSE),
+		did_home_win = as.integer(home_score > away_score),
+		game_date_z = as.vector(scale(as.integer(game_date)))
 	)
-
 
 #### Create functions that test models ####
 # GLMER full model

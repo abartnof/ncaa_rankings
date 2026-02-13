@@ -22,9 +22,9 @@ home_as_participants <-
 	rename(participant = home_team_name, item = away_team_name) %>%
 	mutate(
 		did_participant_win = home_score > away_score,
-		participant_type = 'home',
-	) %>%
-	select(game_id, participant_type, participant, item, did_participant_win)
+		is_participant_home = TRUE,
+	) 
+	# select(game_id, is_participant_home, participant, item, did_participant_win)
 
 # version 2: away team as participant
 away_as_participants <-
@@ -32,9 +32,9 @@ away_as_participants <-
 	rename(participant = away_team_name, item = home_team_name) %>%
 	mutate(
 		did_participant_win = away_score > home_score,
-		participant_type = 'away'
-	) %>%
-	select(game_id, participant_type, participant, item, did_participant_win)
+		is_participant_home = FALSE
+	)
+	# select(game_id, is_participant_home, participant, item, did_participant_win)
 
 # qc: make sure there's one winner per game
 table(home_as_participants$did_participant_win + away_as_participants$did_participant_win)
@@ -43,9 +43,13 @@ x <-
 	bind_rows(home_as_participants, away_as_participants) %>%
 	arrange(game_id) %>%
 	mutate(did_participant_win = did_participant_win * 1L)
-
-
-mod <- lmer(data = x, formula = 0 + did_participant_win ~ item + participant_type + (1|participant))
+		
+# should game_id be introduced here as a fixef to compensate for repeated measures?
+mod <- glmer(
+	data = x, 
+	formula =  did_participant_win ~ 0 + is_participant_home + item + (1|participant),
+	family=binomial	
+	)  
 
 participant_skill <-
 	mod %>%

@@ -6,21 +6,21 @@ Date: February 2026
 
 ## Scripts
 
-collect_data.py: Collect raw game data
+**collect_data.py**: Collect raw game data
 
-elt_game_scores.py: Aggregate the scores for each game
+**elt_game_scores.py**: Aggregate the scores for each game
 
-filter.py: Filter to teams that have played at least 5 games at home, and 5 games away
+**filter.py**: Filter to teams that have played at least 5 games at home, and 5 games away
 
-check_num_components.R: Ensure that all of the NCAA teams exist in the same universe
+**check_num_components.R**: Ensure that all of the NCAA teams exist in the same universe
 
-lmer_one_row.R: Run hierarchical modeling
+**lmer_one_row.R**: Run hierarchical modeling
 
-goodness_of_fit.R: Test accuracy of hierarchical modeling using cross-validation
+**goodness_of_fit.R**: Test accuracy of hierarchical modeling using cross-validation
 
 **Extra:**
 
-lmer_repeated_measures.R: An extra model that models home-team advantage as a fixed-effect
+**lmer_repeated_measures.R**: An extra model that models home-team advantage as a fixed-effect
 
 ## Introduction
 
@@ -63,7 +63,7 @@ You can see the team skill estimates in a csv in this repo.
 There was no question that the hierarchical model would output some measure of relative skill for each team. The question was, how well did the model fit the data? And did it fit the data better than cheaper models?
 
 | Model                          | Median Cross-Validation Accuracy (five-folds) |
-|--------------------------------|-----------------------------------------------|
+|-----------------------------|-------------------------------------------|
 | Marginal home team win rate    | 0.648                                         |
 | Conditional home team win rate | 0.665                                         |
 | Full model                     | 0.701                                         |

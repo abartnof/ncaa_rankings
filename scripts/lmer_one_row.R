@@ -46,6 +46,7 @@ library(lme4)
 #### Prepare data ####
 df <- read_parquet('/Users/andrewbartnof/Documents/projects/public/ncaa_rankings/clean_data/filtered_game_scores.parquet') %>%
 	mutate( game_date = lubridate::as_date(game_date) )
+output_fn <- '/Users/andrewbartnof/Documents/projects/public/ncaa_rankings/output_team_scores/lmer_team_rankings.csv'
 print(df)
 
 
@@ -219,6 +220,9 @@ composite <-
 	rowwise() %>%
 	mutate(composite = 0.5 * (away + home)) %>%
 	ungroup %>%
+	rename(team_name = grp) %>%
 	arrange(desc(composite))
 
 print(composite)
+
+composite %>%  write_csv(output_fn)

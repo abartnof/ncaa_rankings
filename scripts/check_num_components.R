@@ -21,7 +21,7 @@ num_components <- components(g_mbb)$no
 
 print("Checking if there are 1 components:")
 sprintf("%i number of components", num_components)
-g_mbb$layout
+#g_mbb$layout
 
 # There's a handful of outliers, but it's certainly a single component
-plot(g_mbb, vertex.label=NA, vertex.size = 2, vertex.color = 'black')
+#plot(g_mbb, vertex.label=NA, vertex.size = 2, vertex.color = 'black')

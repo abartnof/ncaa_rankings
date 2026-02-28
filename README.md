@@ -60,7 +60,11 @@ The teams were all interconnected— this allows us to continue modeling!
 
 You can see the team skill estimates in a csv in this repo.
 
-There was no question that the hierarchical model would output some measure of relative skill for each team. The question was, how well did the model fit the data? And did it fit the data better than cheaper models?
+The way this works is pretty straightforward. As of the time when I'm writing this, Florida’s estimated home skill level is 2.61 (really these are log-odds to win in a home game), and Houston’s away skill level is 2.73. Houston's score is higher than Florida's, which means Houston is more likely to beat Florida in that context.
+
+But what if we don't know who will be hosting a match? Well, a simple solution is to just take the average of each team's home and away skills, and compare those. So, again, as of the time when I'm writing this, Florida's home skill is 2.61, and their away skill is 2.19. Average those two together, and we got a composite score of 2.4. So, if we know that Florida is heading into a match against another team, but we don't know who's hosting, we can just see if their opponent's composite score is greater than (unlikely) or less than (likely) 2.4.
+
+This brings us to the value of these estimates. There was no question that the hierarchical model would output [some]{.underline} measure of relative skill for each team. The question was, how well did the model fit the data? And did it fit the data better than cheaper models?
 
 | Model                          | Median Cross-Validation Accuracy (five-folds) |
 |-----------------------------|-------------------------------------------|
@@ -94,4 +98,4 @@ This model has a formula like this:
 
 `is_win ~ 0 + is_home + (1|game_id) + (1|target) + (1|opponent)`
 
-This model works quite well as well, but I only include it here out of an obligation for completeness. The difference between this model and the previous model is that this model encodes the home-team advantage as a fixed-effect variable; this means that the home-team advantage is considered the same for all teams. This is conceptually nice (because of its parsimony), but I think it's conceptually unnecessarily rigid.
+This model works quite well as well, but I only include it here out of an desire for completeness. The difference between this model and the previous model is that this model encodes the home-team advantage as a fixed-effect variable; this means that the home-team advantage is considered the same for all teams. This is conceptually nice (because of its parsimony), but I think it's conceptually unnecessarily rigid.
